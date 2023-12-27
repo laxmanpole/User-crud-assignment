@@ -6,11 +6,6 @@ const {
   throwNotFound,
   throwPreconditionFailed,
   throwForbiddenError,
-  throwExpired,
-  throwReauthentication,
-  throwTooManyRequests,
-  throwMethodNotAllowed,
-  throwTimeOut,
 } = require('./custom-error');
 
 module.exports = {
@@ -20,10 +15,5 @@ module.exports = {
   throwNotFound,
   throwPreconditionFailed,
   throwForbiddenError,
-  throwExpired,
-  throwReauthentication,
-  throwTooManyRequests,
-  throwMethodNotAllowed,
-  throwTimeOut,
   getErrorPayload,
 };
