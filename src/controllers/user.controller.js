@@ -108,8 +108,8 @@ const addOne = async (req, res, next) => {
   } catch (err) {
     switch (err.name) {
       case 'SequelizeUniqueConstraintError':
-        err.custom_key = 'NoteConflict';
-        err.message = `Note with name ${req.body.name} already exists`;
+        err.custom_key = 'UserConflict';
+        err.message = `User with email ${req.body.email_id} already exists`;
         break;
       default:
         break;
@@ -159,6 +159,14 @@ const updateOne = async (req, res, next) => {
 
     return success.handler({ user: item }, req, res, next);
   } catch (err) {
+    switch (err.name) {
+      case 'SequelizeUniqueConstraintError':
+        err.custom_key = 'UserConflict';
+        err.message = `User with email ${req.body.email_id} already exists`;
+        break;
+      default:
+        break;
+    }
     return error.handler(err, req, res, next);
   }
 };

@@ -354,7 +354,7 @@ paths:
                           - updated_at
                           - created_at
                     required:
-                      - note
+                      - user
                   meta:
                     type: object
                     properties:
