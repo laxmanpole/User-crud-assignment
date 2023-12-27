@@ -1,0 +1,1886 @@
+openapi: 3.0.1
+info:
+  title: Assignment
+  version: 1.0.0
+  description: Javascript code for Users API
+  contact:
+    name: Laxman Pole
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get Users
+      description: This will return a list of users.
+      parameters:
+        - name: page_no
+          in: query
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            default: 100
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            pattern: '[a-z]'
+            default: created_at
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 4
+            pattern: '[a-z]'
+            enum:
+              - asc
+              - desc
+            default: desc
+        - name: status
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+              - 2
+        - name: search
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 255
+        - name: ids
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 255
+        - name: first_name
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 255
+        - name: last_name
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 255
+        - name: email_id
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 255
+        - name: phone_no
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 32                
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        uniqueItems: true
+                        minItems: 1
+                        items:
+                          required:
+                            - id
+                            - first_name
+                            - last_name
+                            - email_id
+                            - phone_no
+                            - status
+                            - deleted
+                            - created_at
+                            - updated_at
+                          properties:
+                            id:
+                              type: number
+                            first_name:
+                              type: string
+                              minLength: 1
+                            last_name:
+                              type: string
+                              minLength: 1
+                            phone_no:
+                              type: string
+                            status:
+                              type: number
+                            deleted:
+                              type: number
+                            created_at:
+                              type: string
+                              minLength: 1
+                            updated_at:
+                              type: string
+                              minLength: 1
+                            deleted_at: {}
+                    required:
+                      - users
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - data
+                  - meta
+                x-examples:
+                  example-1:
+                    data:
+                      users:
+                        - id: 1
+                          email_id: polelaxman001@gmail.com
+                          first_name: string
+                          last_name: string
+                          phone_no: 123555
+                          status: 1
+                          deleted: 0
+                          created_at: '2021-08-25T09:34:42.000Z'
+                          updated_at: '2021-08-25T09:34:42.000Z'
+                          deleted_at: null
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:49:58.847Z'
+              examples:
+                GetUsers:
+                  value:
+                    data:
+                      users:
+                        - id: 1
+                          email_id: polelaxman001@gmail.com
+                          first_name: string
+                          last_name: string
+                          phone_no: 123555
+                          status: 1
+                          deleted: 0
+                          created_at: '2021-08-25T09:34:42.000Z'
+                          updated_at: '2021-08-25T09:34:42.000Z'
+                          deleted_at: null
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:49:58.847Z'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      fields:
+                        type: array
+                        uniqueItems: true
+                        minItems: 1
+                        items:
+                          required:
+                            - type
+                            - message
+                          properties:
+                            type:
+                              type: string
+                              minLength: 1
+                            message:
+                              type: string
+                              minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                        required:
+                          - message
+                          - message_presets
+                          - options
+                    required:
+                      - code
+                      - key
+                      - message
+                      - fields
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: any.required
+                          message: '"Email Id" is required'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:25:01.254Z'
+              examples:
+                ValidationError:
+                  value:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: any.required
+                          message: '"Email Id" is required'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:25:01.254Z'
+        '500':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+              examples:
+                InternalServerError:
+                  value:
+                    error:
+                      code: 500
+                      key: InternalServerError
+                      message: Internal Server Error
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:30:07.050Z'
+      operationId: GetUsers
+    post:
+      tags:
+        - Users
+      summary: Add user
+      description: This api creates a new user with provided body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUser'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          status:
+                            type: number
+                          deleted:
+                            type: number
+                          id:
+                            type: number
+                          first_name:
+                            type: string
+                            minLength: 1
+                          last_name:
+                            type: string
+                            minLength: 1
+                          email_id:
+                            type: string
+                            minLength: 1
+                          phone_no:
+                            type: string
+                          updated_at:
+                            type: string
+                            minLength: 1
+                          created_at:
+                            type: string
+                            minLength: 1
+                        required:
+                          - status
+                          - deleted
+                          - id
+                          - first_name
+                          - last_name
+                          - email_id
+                          - phone_no
+                          - updated_at
+                          - created_at
+                    required:
+                      - note
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - data
+                  - meta
+                x-examples:
+                  example-1:
+                    data:
+                      user:
+                        version: 1
+                        status: 1
+                        deleted: 0
+                        id: 1
+                        first_name: string
+                        last_name: string
+                        email_id: polelaxman001@gmail.com
+                        updated_at: '2021-08-25T09:34:42.785Z'
+                        created_at: '2021-08-25T09:34:42.785Z'
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:34:42.919Z'
+              examples:
+                AddUser:
+                  value:
+                    data:
+                      user:
+                        status: 1
+                        deleted: 0
+                        id: 1
+                        first_name: string
+                        last_name: string
+                        email_id: string
+                        phone_no: string
+                        updated_at: '2021-08-25T09:34:42.785Z'
+                        created_at: '2021-08-25T09:34:42.785Z'
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:34:42.919Z'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      fields:
+                        type: array
+                        uniqueItems: true
+                        minItems: 1
+                        items:
+                          required:
+                            - key
+                            - type
+                            - message
+                          properties:
+                            key:
+                              type: string
+                              minLength: 1
+                            type:
+                              type: string
+                              minLength: 1
+                            message:
+                              type: string
+                              minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - fields
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - key: name
+                          type: string.base
+                          message: '"Name" must be a string'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:35:47.733Z'
+              examples:
+                ValidationError:
+                  value:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - key: name
+                          type: string.base
+                          message: '"Name" must be a string'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:35:47.733Z'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 409
+                      key: UserConflict
+                      message: User with name string already exists
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:45:11.359Z'
+              examples:
+                UserConflict:
+                  value:
+                    error:
+                      code: 409
+                      key: UserConflict
+                      message: User with name string already exists
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:45:11.359Z'
+        '500':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+              examples:
+                InternalServerError:
+                  value:
+                    error:
+                      code: 500
+                      key: InternalServerError
+                      message: Internal Server Error
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:30:07.050Z'
+      operationId: AddUser
+  /users/count:
+    get:
+      tags:
+        - Users
+      summary: Get users count
+      description: This will return a count of users.
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+              - 2
+        - name: search
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 255
+        - name: first_name
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 255
+        - name: last_name
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 255
+        - name: email_id
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 255
+        - name: phone_no
+          in: query
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 32    
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: number
+                    required:
+                      - count
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - data
+                  - meta
+                x-examples:
+                  example-1:
+                    data:
+                      count: 1
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:52:03.434Z'
+              examples:
+                GetUsersCount:
+                  value:
+                    data:
+                      count: 1
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:52:03.434Z'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      fields:
+                        type: array
+                        uniqueItems: true
+                        minItems: 1
+                        items:
+                          required:
+                            - type
+                            - message
+                          properties:
+                            type:
+                              type: string
+                              minLength: 1
+                            message:
+                              type: string
+                              minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - fields
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: any.required
+                          message: '"Email Id" is required'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:25:01.254Z'
+              examples:
+                ValidationError:
+                  value:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: any.required
+                          message: '"Email Id" is required'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:25:01.254Z'
+        '500':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+              examples:
+                InternalServerError:
+                  value:
+                    error:
+                      code: 500
+                      key: InternalServerError
+                      message: Internal Server Error
+                      message_presets: {}
+                      
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:30:07.050Z'
+      operationId: GetUsersCount
+  '/users/{userId}':
+    get:
+      tags:
+        - Users
+      summary: Describe User
+      description: This will return a user with provided id.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          first_name:
+                            type: string
+                            minLength: 1
+                          last_name:
+                            type: string
+                            minLength: 1
+                          email_id:
+                            type: string
+                            minLength: 1
+                          phone_no:
+                            type: string
+                            minLength: 1
+                          status:
+                            type: number
+                          deleted:
+                            type: number
+                          created_at:
+                            type: string
+                            minLength: 1
+                          updated_at:
+                            type: string
+                            minLength: 1
+                          deleted_at: {}
+                        required:
+                          - id
+                          - email_id
+                          - first_name
+                          - last_name
+                          - phone_no
+                          - status
+                          - deleted
+                          - created_at
+                          - updated_at
+                    required:
+                      - user
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - data
+                  - meta
+                x-examples:
+                  example-1:
+                    data:
+                      user:
+                        id: 1
+                        first_name: string
+                        last_name: string
+                        email_id: polelaxman001@gmail.com
+                        phone_no: 13254646
+                        status: 1
+                        deleted: 0
+                        created_at: '2021-08-25T09:34:42.000Z'
+                        updated_at: '2021-08-25T09:34:42.000Z'
+                        deleted_at: null
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:10:51.170Z'
+              examples:
+                GetUser:
+                  value:
+                    data:
+                      user:
+                        id: 1
+                        first_name: string
+                        last_name: string
+                        email_id: string
+                        phone_no: string
+                        status: 1
+                        deleted: 0
+                        created_at: '2021-08-25T09:34:42.000Z'
+                        updated_at: '2021-08-25T09:34:42.000Z'
+                        deleted_at: null
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:10:51.170Z'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      fields:
+                        type: array
+                        uniqueItems: true
+                        minItems: 1
+                        items:
+                          required:
+                            - type
+                            - message
+                          properties:
+                            type:
+                              type: string
+                              minLength: 1
+                            message:
+                              type: string
+                              minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - fields
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: number.base
+                          message: '"Id" must be a number'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:31:57.827Z'
+              examples:
+                ValidationError:
+                  value:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: number.base
+                          message: '"Id" must be a number'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:31:57.827Z'
+        '404':
+          description: NOT FOUND
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 404
+                      key: UserFound
+                      message: User Not Found
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:32:36.468Z'
+              examples:
+                UserNotFound:
+                  value:
+                    error:
+                      code: 404
+                      key: UserNotFound
+                      message: User Not Found
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:32:36.468Z'
+        '500':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+              examples:
+                InternalServerError:
+                  value:
+                    error:
+                      code: 500
+                      key: InternalServerError
+                      message: Internal Server Error
+                      message_presets: {}
+                      
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:30:07.050Z'
+      operationId: GetUser
+    put:
+      tags:
+        - Users
+      summary: Update User
+      description: This api returns updated user with provided id after updating with provided body.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            default: 1
+        - schema:
+            type: string
+          in: query
+          name: enable
+          description: 'true: Enables user; false: Disables User'    
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          first_name:
+                            type: string
+                            minLength: 1
+                          last_name:
+                            type: string
+                            minLength: 1
+                          email_id:
+                            type: string
+                            minLength: 1
+                          phone_no:
+                            type: string
+                          status:
+                            type: number
+                          deleted:
+                            type: number
+                          created_at:
+                            type: string
+                            minLength: 1
+                          updated_at:
+                            type: string
+                            minLength: 1
+                          deleted_at: {}
+                        required:
+                          - id
+                          - first_name
+                          - last_name
+                          - email_id
+                          - phone_no
+                          - status
+                          - deleted
+                          - created_at
+                          - updated_at
+                    required:
+                      - user
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - data
+                  - meta
+                x-examples:
+                  example-1:
+                    data:
+                      user:
+                        id: 1
+                        first_name: string
+                        last_name: updated string
+                        email_id: abc@gmail.com
+                        phone_no: 123456
+                        status: 1
+                        deleted: 0
+                        created_at: '2021-08-25T09:34:42.000Z'
+                        updated_at: '2021-08-25T12:24:37.726Z'
+                        deleted_at: null
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:24:37.806Z'
+              examples:
+                UpdateUserResponse:
+                  value:
+                    data:
+                      user:
+                        id: 1
+                        first_name: string
+                        last_name: updated string
+                        email_id: abc@gmail.com
+                        phone_no: 12356
+                        status: 1
+                        deleted: 0
+                        created_at: '2021-08-25T09:34:42.000Z'
+                        updated_at: '2021-08-25T12:24:37.726Z'
+                        deleted_at: null
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:24:37.806Z'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      fields:
+                        type: array
+                        uniqueItems: true
+                        minItems: 1
+                        items:
+                          required:
+                            - type
+                            - message
+                          properties:
+                            type:
+                              type: string
+                              minLength: 1
+                            message:
+                              type: string
+                              minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - fields
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: number.base
+                          message: '"Id" must be a number'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:31:57.827Z'
+              examples:
+                ValidationError:
+                  value:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: number.base
+                          message: '"Id" must be a number'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:31:57.827Z'
+        '404':
+          description: NOT FOUND
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 404
+                      key: UserNotFound
+                      message: User Not Found
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:32:36.468Z'
+              examples:
+                UserNotFound:
+                  value:
+                    error:
+                      code: 404
+                      key: UserNotFound
+                      message: User Not Found
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:32:36.468Z'
+        '412':
+          description: PRECONDITION FAILED
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    error:
+                      code: 412
+                      key: PreconditionFailed
+                      message: 'user cant delete'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:25:54.286Z'
+                properties:
+                  error:
+                    type: object
+                    required:
+                      - code
+                      - key
+                      - message
+                      - message_presets
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      message_presets:
+                        type: object
+                  meta:
+                    type: object
+                    required:
+                      - version
+                      - timestamp
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                required:
+                  - error
+                  - meta
+              examples:
+                UpdateConflict:
+                  value:
+                    error:
+                      code: 412
+                      key: PreconditionFailed
+                      message: 'User cant delete'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:25:54.286Z'
+                AlreadyEnabledError:
+                  value:
+                    error:
+                      code: 412
+                      key: PreconditionFailed
+                      message: Only disabled user can be enabled
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:27:18.839Z'
+                AlreadyDisabled:
+                  value:
+                    error:
+                      code: 412
+                      key: PreconditionFailed
+                      message: Only enabled user can be disabled
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:28:04.339Z'
+        '500':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+              examples:
+                InternalServerError:
+                  value:
+                    error:
+                      code: 500
+                      key: InternalServerError
+                      message: Internal Server Error
+                      message_presets: {}
+                      
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:30:07.050Z'
+      operationId: UpdateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  first_name: string
+                  last_name: updated string
+                  email_id: Abc@gmail.com
+                  phone_no: 12345448
+              properties:
+                first_name:
+                  type: string
+                  minLength: 1
+                last_name:
+                  type: string
+                  minLength: 1
+                email_id:
+                  type: string
+                  minLength: 1
+                phone_no:
+                  type: string
+            examples:
+              UpdateUser:
+                value:
+                  first_name: string
+                  last_name: updated string
+                  email_id: Abc@gmail.com
+                  phone_no: 12345448
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: This will delete a user by provided id.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      fields:
+                        type: array
+                        uniqueItems: true
+                        minItems: 1
+                        items:
+                          required:
+                            - type
+                            - message
+                          properties:
+                            type:
+                              type: string
+                              minLength: 1
+                            message:
+                              type: string
+                              minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - fields
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: number.base
+                          message: '"Id" must be a number'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:31:57.827Z'
+              examples:
+                ValidationError:
+                  value:
+                    error:
+                      code: 400
+                      key: ValidationError
+                      message: ValidationError
+                      fields:
+                        - type: number.base
+                          message: '"Id" must be a number'
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:31:57.827Z'
+        '404':
+          description: NOT FOUND
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 404
+                      key: UserNotFound
+                      message: User Not Found
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:32:36.468Z'
+              examples:
+                UserNotFound:
+                  value:
+                    error:
+                      code: 404
+                      key: UserNotFound
+                      message: User Not Found
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T11:32:36.468Z'
+        '412':
+          description: PRECONDITION FAILED
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: number
+                      key:
+                        type: string
+                        minLength: 1
+                      message:
+                        type: string
+                        minLength: 1
+                      message_presets:
+                        type: object
+                        properties: {}
+                    required:
+                      - code
+                      - key
+                      - message
+                      - message_presets
+                  meta:
+                    type: object
+                    properties:
+                      version:
+                        type: number
+                      timestamp:
+                        type: string
+                        minLength: 1
+                    required:
+                      - version
+                      - timestamp
+                required:
+                  - error
+                  - meta
+                x-examples:
+                  example-1:
+                    error:
+                      code: 412
+                      key: PreconditionFailed
+                      message: Enabled user can't be deleted
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:34:56.557Z'
+              examples:
+                PreconditionFailed:
+                  value:
+                    error:
+                      code: 412
+                      key: PreconditionFailed
+                      message: Enabled user can't be deleted
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T12:34:56.557Z'
+        '500':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+              examples:
+                InternalServerError:
+                  value:
+                    error:
+                      code: 500
+                      key: InternalServerError
+                      message: Internal Server Error
+                      message_presets: {}
+                    meta:
+                      version: 1
+                      timestamp: '2021-08-25T09:30:07.050Z'
+      operationId: DeleteUser
+  
+components:
+  schemas:
+    '400':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 400
+            message:
+              type: string
+        meta:
+          $ref: '#/components/schemas/MetaDefinition'
+    '404':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 404
+            message:
+              type: string
+        meta:
+          $ref: '#/components/schemas/MetaDefinition'
+    '412':
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 412
+            message:
+              type: string
+        meta:
+          $ref: '#/components/schemas/MetaDefinition'
+    '500':
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          error:
+            code: 500
+            key: SequelizeConnectionRefusedError
+            message: Internal Server Error
+            message_presets: {}
+          meta:
+            version: 1
+            timestamp: '2021-08-25T09:30:07.050Z'
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - key
+            - message
+            - message_presets
+          properties:
+            code:
+              type: number
+            key:
+              type: string
+              minLength: 1
+            message:
+              type: string
+              minLength: 1
+            message_presets:
+              type: object
+        meta:
+          type: object
+          required:
+            - version
+            - timestamp
+          properties:
+            version:
+              type: number
+            timestamp:
+              type: string
+              minLength: 1
+      required:
+        - error
+        - meta
+    MetaDefinition:
+      type: object
+      properties:
+        version:
+          type: number
+        timestamp:
+          type: string
+          format: date-time
+    Count:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            count:
+              type: number
+        meta:
+          $ref: '#/components/schemas/MetaDefinition'
+    AddUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          minimum: 3
+          maximum: 255
+        last_name:
+          type: string
+          minimum: 3
+          maximum: 255
+        email_id:
+          type: string
+          minimum: 3
+          maximum: 255
+        phone_no:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            user:
+              type: object
+              properties:
+                id:
+                  type: number
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email_id:
+                  type: string
+                phone_no: 
+                  type: string
+                status:
+                  type: number
+                deleted:
+                  type: number
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
+                deleted_at:
+                  type: string
+                  format: date-time
+        meta:
+          $ref: '#/components/schemas/MetaDefinition'
+    UsersListResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            users:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  first_name:
+                    type: string
+                  last_name:
+                    type: string
+                  email_id:
+                    type: string
+                  phone_no:
+                    type: string
+                  status:
+                    type: number
+                  deleted:
+                    type: number
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                  deleted_at:
+                    type: string
+                    format: date-time
+        meta:
+          $ref: '#/components/schemas/MetaDefinition'
+servers:
+  - url: 'http://0.0.0.0:8080/users'
+    description: Local Server
+tags:
+  - name: Users
